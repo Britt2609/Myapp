@@ -3,11 +3,13 @@ package com.example.britt.myapp;
 import android.app.VoiceInteractor;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static java.security.AccessController.getContext;
@@ -59,6 +62,7 @@ public class ThirthActivity extends AppCompatActivity {
     String id;
     String email;
     String password;
+    TextView points;
 
 
     @Override
@@ -84,24 +88,45 @@ public class ThirthActivity extends AppCompatActivity {
         category = intent.getStringExtra("category");
         getQuestions();
 
+        points = findViewById(R.id.points);
+
         getFromDB();
+        setListener();
     }
 
+    public void setListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
 
-    public void addHighScore() {
-        Integer newScore = mUser.score + score;
-        databaseReference.child("users").child("id").child("score").setValue(newScore);
+                if (user != null) {
+                    Log.d("TAG", "onAuthStateChanged:signedIn" + user.getUid());
+                    Intent intent = new Intent(ThirthActivity.this, FourthActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Log.d("TAG", "onAuthStateChanged:signedIn");
+                }
+            }
+        };
+    }
+
+    public void UpdateHighScore(Integer addscore) {
+        score = mUser.score + addscore;
+        points.setText("score: " + score);
+        databaseReference.child("users").child(id).child("score").setValue(score);
     }
 
     public void getFromDB() {
         // Read from the database
-        ValueEventListener listener = new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+
                 mUser = dataSnapshot.child("users").child(id).getValue(User.class);
-                System.out.println("USEEEEEEEEEEEEEEEEEEEEEEEEEER " + mUser);
                 Integer score = mUser.score;
                 Log.d("scorevalue added:              ", "Value is: " + score);
 
@@ -112,9 +137,7 @@ public class ThirthActivity extends AppCompatActivity {
                 // Failed to read value
                 Log.w("value failure: ", "Failed to read value.", error.toException());
             }
-        };
-
-        databaseReference.addValueEventListener(listener);
+        });
     }
 
     public String ApiSelected(String category) {
@@ -207,7 +230,8 @@ public class ThirthActivity extends AppCompatActivity {
 
     private void goToNextQuestion(Integer index) {
         if (index>= quiz.length()){
-//            addHighScore();
+            Intent intent = new Intent(ThirthActivity.this, FourthActivity.class);
+            startActivity(intent);
             finish();
         }
         String getquestion;
@@ -236,17 +260,21 @@ public class ThirthActivity extends AppCompatActivity {
     }
 
     public void goToNext(View view) {
-//        Integer answerChosen = view.getId();
         Boolean tag = (Boolean) view.getTag();
         if (tag) {
-            score = score + 100;
-            Toast.makeText(this, "Correct answer! You now have " + score + " points :)",
+            Toast.makeText(this, "Correct answer!",
                     Toast.LENGTH_LONG).show();
+            UpdateHighScore(10);
         }
-        else if (score > 0) {
-            score = score - 80;
-            Toast.makeText(this, "Wrong answer! You now have " + score + " points :(",
+        else {
+            Toast.makeText(this, "Wrong answer!",
                     Toast.LENGTH_LONG).show();
+            if (score > 7) {
+                UpdateHighScore(-8);
+            }
+            else {
+                UpdateHighScore(score);
+            }
         }
 
         index += 1;
@@ -258,7 +286,15 @@ public class ThirthActivity extends AppCompatActivity {
         String newReplaceString = replaceString.replace("&quot;", "\"");
         newReplaceString = newReplaceString.replace("&euml;", "ë");
         newReplaceString = newReplaceString.replace("&amp;", "&");
-        newReplaceString = newReplaceString.replace("&rsquo;", "'");
+        newReplaceString = newReplaceString.replace("&rsquo;", "`");
+        newReplaceString = newReplaceString.replace("&lsquo;", "`");
+        newReplaceString = newReplaceString.replace("&ldquo;", "\"");
+        newReplaceString = newReplaceString.replace("&rdquo;", "\"");
+        newReplaceString = newReplaceString.replace("&hellip;", "...");
+        newReplaceString = newReplaceString.replace("&lt;", "<");
+        newReplaceString = newReplaceString.replace("&gt;", ">");
+        newReplaceString = newReplaceString.replace("&le;", "<=");
+        newReplaceString = newReplaceString.replace("&ge;", ">=");
         return newReplaceString;
     }
 

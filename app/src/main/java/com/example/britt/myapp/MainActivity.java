@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String password;
     Button login;
     Button useremail;
-    String username;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "onAuthStateChanged:signedIn" + user.getUid());
                     Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                     startActivity(intent);
-                    addUser(user);
                     finish();
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signedIn");
@@ -68,9 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void addUser(FirebaseUser user) {
-        String name = user.getUid();
-        User aUser = new User(0, name, email, password);
-        databaseReference.child("users").child("id").setValue(aUser);
+        String id_user = user.getUid();
+        User aUser = new User(0, password, email);
+        id = auth.getCurrentUser().getUid();
+        databaseReference.child("users").child(id_user).setValue(aUser);
     }
 
     @Override
@@ -92,11 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void CreateUser() {
         EditText get_email = findViewById(R.id.getEmail);
         EditText get_password = findViewById(R.id.getPassword);
-        EditText get_username = findViewById(R.id.getUsername);
 
         email = get_email.getText().toString();
         password = get_password.getText().toString();
-        username = get_username.getText().toString();
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -104,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-
-                            addNewUser(username, email, password);
+                            FirebaseUser user = auth.getCurrentUser();
+                            addUser(user);
 
                             Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                             startActivity(intent);
@@ -151,11 +149,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // ...
                     }
                 });
-    }
-
-    public void addNewUser(String name, String email, String password) {
-        User nUser = new User(0, name, email, password);
-        databaseReference.child("users").child("id").setValue(nUser);
     }
 
     @Override

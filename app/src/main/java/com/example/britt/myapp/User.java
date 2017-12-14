@@ -6,15 +6,13 @@ import java.util.List;
 
 
 public class User {
-    public String name;
+    public String email;
     public Integer score;
     public String password;
-    public String email;
 
     public User() {}
 
-    public User(Integer score, String name, String email, String password) {
-        this.name = name;
+    public User(Integer score, String password, String email) {
         this.password = password;
         this.score = score;
         this.email = email;

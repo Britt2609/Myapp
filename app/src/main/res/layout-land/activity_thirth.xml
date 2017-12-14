@@ -9,6 +9,13 @@
     tools:context="com.example.britt.myapp.ThirthActivity">
 
     <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="score: 0" />
+
+    <TextView
         android:id="@+id/question"
         android:layout_width="300sp"
         android:layout_marginTop="50sp"

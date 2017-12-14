@@ -38,6 +38,7 @@ import static java.security.AccessController.getContext;
 public class SecondActivity extends AppCompatActivity {
 
     Spinner spinner;
+    FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,27 @@ public class SecondActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        setListener();
+
     }
 
+    public void setListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null) {
+                    Log.d("TAG", "onAuthStateChanged:signedIn" + user.getUid());
+                    Intent intent = new Intent(SecondActivity.this, ThirthActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Log.d("TAG", "onAuthStateChanged:signedIn");
+                }
+            }
+        };
+    }
 
     public void SelectCategory(View view) {
         String category = spinner.getSelectedItem().toString();
