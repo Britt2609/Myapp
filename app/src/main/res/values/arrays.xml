@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string-array name="categories">
+        <item>Animals</item>
+        <item>Board Games</item>
+        <item>Books</item>
+        <item>Computers</item>
+        <item>Film</item>
+        <item>General Knowledge</item>
+        <item>Mathematics</item>
+        <item>Music</item>
+        <item>Musicals and Theatres</item>
+        <item>Mythology</item>
+        <item>Television</item>
+        <item>Video Games</item>
+    </string-array>
+
+</resources>
