@@ -1,3 +1,7 @@
+#Review
+
+Unfortunately I did not have a lot of time to use all the feedback to upgrade my code, so only a few points have been improved.
+
 ##Reviewer Natasje Wezel
 
 TAG namen voor Log.d beter passend maken.
