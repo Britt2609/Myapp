@@ -4,6 +4,9 @@ package com.example.britt.myapp;
 import java.lang.reflect.Array;
 import java.util.List;
 
+/*
+ * Create class for a user, with email, score and password.
+ */
 
 public class User {
     public String email;
