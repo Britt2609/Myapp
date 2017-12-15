@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class FourthActivity extends AppCompatActivity {
 
@@ -30,7 +32,6 @@ public class FourthActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
-    User mUser;
     String id;
 
     ListView scoreboard;
@@ -80,23 +81,26 @@ public class FourthActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 
-                ArrayList<Long> scoreboardArray = new ArrayList<>();
-                ArrayAdapter<Long> mAdapter = new ArrayAdapter<Long>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, scoreboardArray);
+//
+//                Map<Long, String> scoreMap = new TreeMap(Collections.reverseOrder());
+//                ScoreboardArray scoreboardArray = new ScoreboardArray(getApplicationContext(), scoreMap, R.id.layout.listview_scores);
+//
+////
+                ArrayList<String> scoreboardArray = new ArrayList<>();
+                ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, scoreboardArray);
 
                 scoreboard.setAdapter(mAdapter);
 
                 Iterator<DataSnapshot> items = dataSnapshot.child("users").getChildren().iterator();
                 Log.d("TAG", "Total users: " + dataSnapshot.getChildrenCount());
-                Integer i = 0;
                 while (items.hasNext()) {
                     DataSnapshot item = items.next();
                     String name = item.child("email").getValue().toString();
                     Long highscore = (Long) item.child("score").getValue();
-                    i += 1;
+                    String toAdd = name + "     " + highscore;
 
-                    scoreboardArray.add(highscore);
-                    Collections.sort(scoreboardArray);
-                    Collections.reverse(scoreboardArray);
+                    mAdapter.add(toAdd);
+
                     mAdapter.notifyDataSetChanged();
 
                 }

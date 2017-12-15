@@ -28,25 +28,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private DatabaseReference databaseReference;
 
+    // Initialize user data.
     String email;
     String password;
+    String id;
+
     Button login;
     Button useremail;
-    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Set listeners on buttons for logging in and creating an account.
         login = findViewById(R.id.login);
         login.setOnClickListener(this);
-
         useremail = findViewById(R.id.make_account);
         useremail.setOnClickListener(this);
 
+        // Set AuthStateListener to make sure only logged in users can go to next activity.
         auth = FirebaseAuth.getInstance();
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -66,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
     }
 
+    /*
+     * Add an user with initial score 0.
+     */
     public void addUser(FirebaseUser user) {
         String id_user = user.getUid();
         User aUser = new User(0, password, email);
@@ -73,11 +78,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         databaseReference.child("users").child(id_user).setValue(aUser);
     }
 
+    /*
+     * Add AuthStateListener.
+     */
     @Override
     public void onStart() {
         super.onStart();
         auth.addAuthStateListener(authStateListener);
     }
+
 
     @Override
     public void onStop() {

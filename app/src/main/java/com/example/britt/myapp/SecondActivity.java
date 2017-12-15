@@ -45,34 +45,39 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
+        // Set spinner to be able to choose category.
         spinner = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        // Set AuthStateListener.
         setListener();
 
     }
 
+    // Set listener to check if user is logged in.
     public void setListener() {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
+                // If user logged in, give permission to go to next activity.
                 if (user != null) {
                     Log.d("TAG", "onAuthStateChanged:signedIn" + user.getUid());
                     Intent intent = new Intent(SecondActivity.this, ThirthActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Log.d("TAG", "onAuthStateChanged:signedIn");
+                    Log.d("TAG", "onAuthStateChanged:notSignedIn");
                 }
             }
         };
     }
 
+    // Set
     public void SelectCategory(View view) {
         String category = spinner.getSelectedItem().toString();
         Intent intent = new Intent(this, ThirthActivity.class);
@@ -81,16 +86,25 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
+    //
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    //
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         FirebaseAuth.getInstance().signOut();
         finish();
         return true;
+    }
+
+    // Function to go to Scoreboard if the button is pressed.
+    public void Highscore(View view) {
+        Intent intent = new Intent(SecondActivity.this, FourthActivity.class);
+        startActivity(intent);
     }
 }
