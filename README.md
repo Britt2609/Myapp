@@ -10,7 +10,12 @@ Then after 10 questions the user can see a list of the scores of all users.
 ![screenshot app](doc/Screenshot_20171215-164535.png)
 ![screenshot app](doc/Screenshot_20171215-164541.png)
 
-##Tasklist
+#Better code hub
+
+###Score
+[![BCH compliance](https://bettercodehub.com/edge/badge/britt0508/Myapp?branch=master)](https://bettercodehub.com/)
+
+###Tasklist
 
 Write Short Units of Code:
   — ThirthActivity.​ApiSelected(String)
