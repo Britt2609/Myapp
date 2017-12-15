@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
     }
 
-    /*
+    /**
      * Add an user with initial score 0.
      */
     public void addUser(FirebaseUser user) {
@@ -79,18 +79,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         databaseReference.child("users").child(id_user).setValue(aUser);
     }
 
-    /*
-     * Add AuthStateListener.
-     */
     @Override
     public void onStart() {
         super.onStart();
         auth.addAuthStateListener(authStateListener);
     }
 
-    /*
-     * Remove AuthStateListener.
-     */
     @Override
     public void onStop() {
         super.onStop();
@@ -100,8 +94,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    public void CreateUser() {
+    /**
+     * Creates user with email and password.
+     */
+    public void createUser() {
         EditText get_email = findViewById(R.id.getEmail);
         EditText get_password = findViewById(R.id.getPassword);
 
@@ -134,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(MainActivity.this, "Please fill in a valid email and password!",
+                                Toast.makeText(MainActivity.this, "Please fill in an password of at least 6 characters!",
                                         Toast.LENGTH_SHORT).show();
                             }
 
@@ -144,7 +140,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void LogIn() {
+    /**
+     * Logs in user with email and password.
+     */
+    public void logIn() {
 
         EditText get_email = findViewById(R.id.getEmail);
         EditText get_password = findViewById(R.id.getPassword);
@@ -158,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.LENGTH_SHORT).show();
         }
         else if (password.equals("")) {
-            Toast.makeText(MainActivity.this, "Please fill in an password of at least 6 characters!",
+            Toast.makeText(MainActivity.this, "Please fill in a valid email and password!",
                     Toast.LENGTH_SHORT).show();
         }
         else {
@@ -186,16 +185,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // Set onClick to be able to log in or create an account.
     @Override
     public void onClick(View v) {
+        // Set onClick to be able to log in or create an account.
         switch (v.getId()) {
             case R.id.login:
-                LogIn();
+                logIn();
                 break;
 
             case R.id.make_account:
-                CreateUser();
+                createUser();
                 break;
         }
     }

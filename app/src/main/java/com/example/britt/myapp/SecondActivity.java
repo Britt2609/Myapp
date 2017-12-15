@@ -57,7 +57,9 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    // Set listener to check if user is logged in.
+    /**
+     * Set listener to check if user is logged in.
+     */
     public void setListener() {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -77,7 +79,9 @@ public class SecondActivity extends AppCompatActivity {
         };
     }
 
-    // Give selected category to next activity and go to next activity.
+    /**
+     * Give selected category to next activity and go to next activity.
+     */
     public void SelectCategory(View view) {
         String category = spinner.getSelectedItem().toString();
         Intent intent = new Intent(this, ThirthActivity.class);
@@ -86,14 +90,14 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
-    //
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    //
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

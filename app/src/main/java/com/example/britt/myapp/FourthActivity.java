@@ -55,7 +55,9 @@ public class FourthActivity extends AppCompatActivity {
         setListener();
     }
 
-    // Set AuthStateListener to make sure only logged in users can go to next activity.
+    /**
+     * Set AuthStateListener to make sure only logged in users can go to next activity.
+     */
     public void setListener() {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -74,7 +76,7 @@ public class FourthActivity extends AppCompatActivity {
         };
     }
 
-    /*
+    /**
      * Get all scores from database and show in listView with corresponding user.
      */
     public void getFromDB() {
@@ -114,7 +116,9 @@ public class FourthActivity extends AppCompatActivity {
         });
     }
 
-    // Intent starts when button is clicked to start a new quiz.
+    /**
+     * Intent starts when button is clicked to start a new quiz.
+     */
     public void NextQuiz(View view) {
         Intent intent = new Intent(FourthActivity.this, SecondActivity.class);
         startActivity(intent);

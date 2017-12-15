@@ -92,7 +92,9 @@ public class ThirthActivity extends AppCompatActivity {
         setListener();
     }
 
-    // Set AuthStateListener to make sure only logged in users can go to next activity.
+    /**
+     * Set AuthStateListener to make sure only logged in users can go to next activity.
+     */
     public void setListener() {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -111,7 +113,7 @@ public class ThirthActivity extends AppCompatActivity {
         };
     }
 
-    /*
+    /**
      * Update score of current user.
      */
     public void UpdateHighScore(Integer addscore) {
@@ -120,7 +122,7 @@ public class ThirthActivity extends AppCompatActivity {
         databaseReference.child("users").child(id).child("score").setValue(score);
     }
 
-    /*
+    /**
      * Get data from database.
      */
     public void getFromDB() {
@@ -142,7 +144,7 @@ public class ThirthActivity extends AppCompatActivity {
         });
     }
 
-    /*
+    /**
      * Get selected category and convert to url.
      */
     public String ApiSelected(String category) {
@@ -202,7 +204,7 @@ public class ThirthActivity extends AppCompatActivity {
         return url;
     }
 
-    /*
+    /**
      * Get questions with api key.
      */
     public void getQuestions() {
@@ -234,7 +236,7 @@ public class ThirthActivity extends AppCompatActivity {
         queue.add(JsonRequest);
     }
 
-    /*
+    /**
      * Go to next question and go to next activity when done.
      */
     private void goToNextQuestion(Integer index) {
@@ -272,7 +274,7 @@ public class ThirthActivity extends AppCompatActivity {
         }
     }
 
-    /*
+    /**
      * Check if answer is correct, update score and go to next question.
      */
     public void goToNext(View view) {
@@ -303,7 +305,7 @@ public class ThirthActivity extends AppCompatActivity {
         goToNextQuestion(index);
     }
 
-    /*
+    /**
      * Convert encrypted special characters in the api key to characters.
      */
     public String replaceChar(String string){
