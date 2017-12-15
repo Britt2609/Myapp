@@ -55,6 +55,7 @@ public class FourthActivity extends AppCompatActivity {
         setListener();
     }
 
+    // Set AuthStateListener to make sure only logged in users can go to next activity.
     public void setListener() {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -73,19 +74,16 @@ public class FourthActivity extends AppCompatActivity {
         };
     }
 
+    /*
+     * Get all scores from database and show in listView with corresponding user.
+     */
     public void getFromDB() {
-        // Read from the database
+        // Read from the database.
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
 
-//
-//                Map<Long, String> scoreMap = new TreeMap(Collections.reverseOrder());
-//                ScoreboardArray scoreboardArray = new ScoreboardArray(getApplicationContext(), scoreMap, R.id.layout.listview_scores);
-//
-////
+                // Set an adapter to the listView.
                 ArrayList<String> scoreboardArray = new ArrayList<>();
                 ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_expandable_list_item_1, scoreboardArray);
 
@@ -93,6 +91,8 @@ public class FourthActivity extends AppCompatActivity {
 
                 Iterator<DataSnapshot> items = dataSnapshot.child("users").getChildren().iterator();
                 Log.d("TAG", "Total users: " + dataSnapshot.getChildrenCount());
+
+                // Add all users with score to the adapter.
                 while (items.hasNext()) {
                     DataSnapshot item = items.next();
                     String name = item.child("email").getValue().toString();
@@ -100,7 +100,6 @@ public class FourthActivity extends AppCompatActivity {
                     String toAdd = name + "     " + highscore;
 
                     mAdapter.add(toAdd);
-
                     mAdapter.notifyDataSetChanged();
 
                 }
@@ -109,12 +108,13 @@ public class FourthActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
+                // Failed to read value.
                 Log.w("value failure: ", "Failed to read value.", error.toException());
             }
         });
     }
 
+    // Intent starts when button is clicked to start a new quiz.
     public void NextQuiz(View view) {
         Intent intent = new Intent(FourthActivity.this, SecondActivity.class);
         startActivity(intent);

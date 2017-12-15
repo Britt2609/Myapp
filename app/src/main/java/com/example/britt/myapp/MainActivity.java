@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // Initialize for database.
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private static final String TAG = "firebase";
@@ -87,7 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         auth.addAuthStateListener(authStateListener);
     }
 
-
+    /*
+     * Remove AuthStateListener.
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -104,29 +107,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         email = get_email.getText().toString();
         password = get_password.getText().toString();
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = auth.getCurrentUser();
-                            addUser(user);
 
-                            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+        // Check if email and password are filled in.
+        if (email.equals("")) {
+            Toast.makeText(MainActivity.this, "Please fill in an email!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (password.equals("")) {
+            Toast.makeText(MainActivity.this, "Please fill in an password of at least 6 characters!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "createUserWithEmail:success");
+                                FirebaseUser user = auth.getCurrentUser();
+                                addUser(user);
+
+                                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(MainActivity.this, "Please fill in a valid email and password!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            // ...
                         }
-
-                        // ...
-                    }
-                });
+                    });
+        }
     }
 
     public void LogIn() {
@@ -137,29 +152,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         email = get_email.getText().toString();
         password = get_password.getText().toString();
 
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                            startActivity(intent);
-                            finish();
+        // Check if email and password are filled in.
+        if (email.equals("")) {
+            Toast.makeText(MainActivity.this, "Please fill in an email!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (password.equals("")) {
+            Toast.makeText(MainActivity.this, "Please fill in an password of at least 6 characters!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information and go to next activity.
+                                Log.d(TAG, "signInWithEmail:success");
+                                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                                startActivity(intent);
+                                finish();
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(MainActivity.this, "Wrong email and/or password!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
+                            // ...
                         }
-
-                        // ...
-                    }
-                });
+                    });
+        }
     }
 
+    // Set onClick to be able to log in or create an account.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

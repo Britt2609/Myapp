@@ -77,7 +77,7 @@ public class SecondActivity extends AppCompatActivity {
         };
     }
 
-    // Set
+    // Give selected category to next activity and go to next activity.
     public void SelectCategory(View view) {
         String category = spinner.getSelectedItem().toString();
         Intent intent = new Intent(this, ThirthActivity.class);
